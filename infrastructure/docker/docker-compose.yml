@@ -1,0 +1,64 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: mern_auth_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ../tls:/etc/nginx/certs:ro
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+
+  frontend:
+    container_name: mern_auth_frontend
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    image: mern-auth/frontend:latest
+    ports:
+      - "5173"
+    env_file:
+      - ./frontend.env
+    depends_on:
+      - backend
+    restart: unless-stopped
+  
+  backend:
+    container_name: mern_auth_backend
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    image: mern-auth/backend:latest
+    ports:
+      - "3000"
+    env_file:
+      - ./backend.env
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  database:
+    container_name: mern_auth_database
+    image: mongo:5.0
+    ports:
+      - "27017"
+    volumes:
+      - mern-auth-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: qwerty
+      MONGO_INITDB_DATABASE: mern-auth
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  mern-auth-data:
