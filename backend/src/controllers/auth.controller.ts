@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { loginUser, refreshAccessToken, registerUser, verifyUserOtp, forgotPassword, resetPassword, resendVerificationOtp } from '@/services/auth.service';
-import { successResponse } from '@/utils/response.util';
+import { successResponse } from '@/utils/response.utils';
 
 import { refreshTokenCookieOptions } from '@/config/cookies';
 import { MESSAGES } from '@/constants/messages';
@@ -21,6 +21,7 @@ export const registerController = async (
             user: {
                 ...newUser,
                 _id: newUser._id.toString(),
+                friends: newUser.friends.map((friend: any) => friend.toString()),
             }
         }
     );
@@ -66,7 +67,8 @@ export const loginController = async (
             accessToken, 
             user: { 
                 ...userObject, 
-                _id: userObject._id.toString() 
+                _id: userObject._id.toString(),
+                friends: userObject.friends.map((friend: any) => friend.toString())
             } 
         }
     );
@@ -130,8 +132,8 @@ export const checkAuthController = async (
         MESSAGES.USER_AUTH_CHECKED, 
         { 
             user: { 
-                ...user, 
-                _id: user._id.toString() 
+                ...user!, 
+                _id: user!._id.toString() 
             }
         }
     );

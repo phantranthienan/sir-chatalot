@@ -18,7 +18,11 @@ export const updateUserAvatar = async (
   image: File
 ): Promise<ApiResponse<UpdateUserAvatarResponse>> => {
   const formData = new FormData();
+  console.log('image', image);
   formData.append('avatar', image);
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
   const response = await axios.put<ApiResponse<UpdateUserAvatarResponse>>(
     '/users/me/avatar',
     formData

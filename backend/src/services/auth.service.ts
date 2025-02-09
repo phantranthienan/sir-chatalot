@@ -3,10 +3,10 @@ import { User } from '@/models/user.model';
 import { ConflictError, NotFoundError, UnauthorizedError, BadRequestError } from '@/errors/api.errors';
 import { JsonWebTokenError } from 'jsonwebtoken';
 
-import { generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken } from '@/utils/jwt.util';
-import { hashPassword, comparePassword } from '@/utils/bcrypt.util';
-import { sendForgotPasswordEmail, sendVerificationOtpEmail } from '@/utils/nodemailer.util';
-import { generateOTP } from '@/utils/otp.util';
+import { generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken } from '@/utils/jwt.utils';
+import { hashPassword, comparePassword } from '@/utils/bcrypt.utils';
+import { sendForgotPasswordEmail, sendVerificationOtpEmail } from '@/utils/nodemailer.utils';
+import { generateOTP } from '@/utils/otp.utils';
 
 import { MESSAGES } from '@/constants/messages';
 import { ENV } from '@/config/env';

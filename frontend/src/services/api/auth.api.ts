@@ -15,7 +15,6 @@ import {
   CheckAuthResponseData,
 } from '@/types/api/responses/auth.responses';
 import { ApiResponse } from '@/types/api/responses/response.types';
-import { clearAccessToken } from '@/utils/token.utils';
 
 export const register = async (
   registerData: RegisterRequestBody
@@ -59,7 +58,6 @@ export const login = async (
 
 export const logout = async (): Promise<ApiResponse<null>> => {
   const response = await axios.post('/auth/logout');
-  clearAccessToken();
   return response.data;
 };
 

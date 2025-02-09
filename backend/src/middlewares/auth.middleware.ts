@@ -4,7 +4,13 @@ import { UnauthorizedError } from '@/errors/api.errors';
 import { MESSAGES } from '@/constants/messages';
 declare module 'express' {
     export interface Request {
-        user?: any;
+        user?: {
+            _id: string;
+            email: string;
+            username: string;
+            avatarUrl: string;
+            friends: string[];
+        };
     }
 }
 
@@ -18,6 +24,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const accessToken = authHeader.split(' ')[1];
     const user = await decodeAccessToken(accessToken);
 
-    req.user = user;
+    req.user = { ...user, _id: user._id.toString(), friends: user.friends.map(friend => friend.toString()) };
     next();
 };

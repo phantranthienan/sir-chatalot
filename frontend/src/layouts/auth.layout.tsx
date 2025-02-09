@@ -7,6 +7,7 @@ const AuthLayout = () => {
   if (isAuthenticated) {
     return <Navigate to="/" />;
   }
+
   return (
     <main className="flex h-screen flex-col items-center justify-center">
       <div className="text-primary bg-primary/10 mb-2 flex items-center space-x-2 rounded-lg p-3">

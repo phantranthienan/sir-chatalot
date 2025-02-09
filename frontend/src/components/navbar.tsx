@@ -8,6 +8,7 @@ import * as authApi from '@/services/api/auth.api';
 import { LINKS } from '@/constants/links';
 
 import { LogOut, MessageSquare, Settings, User } from 'lucide-react';
+import { clearAccessToken } from '@/utils/token.utils';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     try {
       const response = await authApi.logout();
+      clearAccessToken();
       unAuthenticate();
       handleSuccess(response.message);
       navigate(LINKS.LOGIN);

@@ -4,6 +4,8 @@ export interface RegisterResponseData {
         _id: string,
         email: string,
         username: string,
+        avatarUrl: string,
+        friends: string[],
     }
 }
 export interface LoginResponseData {
@@ -12,6 +14,8 @@ export interface LoginResponseData {
         _id: string,
         email: string,
         username: string,
+        avatarUrl: string,
+        friends: string[],
     }
 }
 
@@ -20,6 +24,8 @@ export interface CheckAuthResponseData {
         _id: string,
         email: string,
         username: string,
+        avatarUrl: string,
+        friends: string[],
     }
 }
 

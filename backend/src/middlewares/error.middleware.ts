@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
+import { MulterError } from 'multer';
 
 import { ApiError } from '@/errors/api.errors'
 import { ApiResponse } from '@/types/responses/response.type';
-import { errorResponse } from '@/utils/response.util';
+import { errorResponse } from '@/utils/response.utils';
 import { MESSAGES } from '@/constants/messages';
+import { FileTooLargeError } from '@/errors/file.errors';
 
 export const errorHandler = (
     err: Error, 
@@ -12,6 +14,17 @@ export const errorHandler = (
     res: Response<ApiResponse<null>>, 
     next: NextFunction
 ) => {
+    console.error(err);
+    if (err instanceof MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            const fileTooLarge = new FileTooLargeError();
+            
+            const response = errorResponse(fileTooLarge.message);
+            res.status(fileTooLarge.statusCode).json(response);
+            return;
+        }
+    }
+
     if (err instanceof ZodError) {
         const errors = err.errors.map((error) => {
             return {
