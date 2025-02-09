@@ -15,7 +15,7 @@ const Notification: React.FC = () => {
   };
 
   return (
-    <div className="toast toast-top toast-center mx-0 max-w-sm">
+    <div className="toast toast-top toast-center z-50 mx-0 max-w-sm">
       <div
         className={`alert ${alertTypeClass[type]} alert-vertical sm:alert-horizontal m-auto gap-0.5 sm:gap-3`}
       >

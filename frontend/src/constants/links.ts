@@ -1,5 +1,7 @@
 export const LINKS = {
   HOME: '/',
+  SETTING: '/setting',
+  PROFILE: '/profile',
   AUTH: '/auth',
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',

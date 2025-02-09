@@ -7,6 +7,9 @@ import ProtectedRoute from './protected-route';
 import { LINKS } from '@/constants/links';
 
 const HomePage = lazy(() => import('@/pages/home.page'));
+const ProfilePage = lazy(() => import('@/pages/profile.page'));
+const SettingPage = lazy(() => import('@/pages/setting.page'));
+
 const LoginPage = lazy(() => import('@/pages/auth/login.page'));
 const RegisterPage = lazy(() => import('@/pages/auth/register.page'));
 const VerifyAccountPage = lazy(() => import('@/pages/auth/verify-account.page'));
@@ -20,7 +23,10 @@ const AppWithRoutes = () => {
       <Routes>
         <Route path={LINKS.HOME} element={<ProtectedRoute />}>
           <Route index element={<HomePage />} />
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
+
+        <Route path={`${LINKS.HOME}/setting`} element={<SettingPage />} />
         {/* Auth routes */}
         <Route path={LINKS.AUTH} element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
