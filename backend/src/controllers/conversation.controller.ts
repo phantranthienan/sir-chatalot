@@ -64,7 +64,12 @@ export const getMessagesController = async (
 ) => {
     const { conversationId } = req.params;
 
+    // const page = parseInt(req.query.page as string, 10) || 1;
+    // const limit = parseInt(req.query.limit as string, 10) || 15;
+    // const skip = (page - 1) * limit;
+
     const messages = await getMessages(conversationId);
+
     res.status(200).json(successResponse("Get messages successfully", {
         messages,
     }));

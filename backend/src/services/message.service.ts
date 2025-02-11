@@ -36,10 +36,17 @@ export const sendMessage = async (
     return messageObject;
 }
 
-export const getMessages = async (conversationId: string) => {
+export const getMessages = async (
+    conversationId: string, 
+    // limit: number, 
+    // skip: number
+) => {
     const messages = await Message.find({ conversation: conversationId })
         .sort({ createdAt: 1 })
+        // .skip(skip)
+        // .limit(limit)
         .populate('sender');
+    
     const messageObjects = messages.map(message => message.toObject());
     return messageObjects;
 }

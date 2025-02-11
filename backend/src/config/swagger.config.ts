@@ -25,6 +25,6 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Function to setup Swagger UI in the app
 export const setupSwagger = (app: Express) => {
-    app.use('/api-document', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-    console.log('✅ Swagger API docs available at http://localhost:3000/api-document');
+    app.use('/api/document', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    console.log('✅ Swagger API docs available at http://localhost:3000/api/document');
 };

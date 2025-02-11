@@ -35,6 +35,8 @@ export const useSocketStore = create<SocketStates & SocketActions>(
 
     connect: () => {
       const socket = io(SOCKET_URL, {
+        transports: ['websocket'],
+        rejectUnauthorized: false,
         autoConnect: false,
         query: {
           userId: useAuthStore.getState().user?._id,
@@ -42,6 +44,7 @@ export const useSocketStore = create<SocketStates & SocketActions>(
       });
 
       socket.on('connect', () => {
+        console.log('Connected to socket server');
         set({ isConnected: true });
       });
 
@@ -77,8 +80,6 @@ export const useSocketStore = create<SocketStates & SocketActions>(
           socket.emit('join_conversation', conversationId);
           joinedConversations.add(conversationId);
           set({ joinedConversations });
-        } else {
-          console.log(`Already joined conversation ${conversationId}`);
         }
       }
     },

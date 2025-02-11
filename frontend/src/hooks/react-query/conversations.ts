@@ -1,5 +1,11 @@
 // src/hooks/react-query/conversations.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery,
+  QueryFunctionContext,
+} from '@tanstack/react-query';
 import {
   getConversations,
   initiateConversation,
@@ -8,6 +14,9 @@ import {
   getConversationDetails,
 } from '@/services/api/conversation.api'; // adjust the import path if needed
 import useNotification from '../use-notification';
+import axios from '@/services/api/axios.config';
+import { GetMessagesResponseData } from '@/types/api/responses/conversation.responses';
+import { ApiResponse } from '@/types/api/responses/response.type';
 
 // Define constant query keys for conversations
 export const QUERY_KEYS = {
@@ -79,6 +88,36 @@ export const useSendMessageMutation = (conversationId: string) => {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.messages(conversationId),
       });
+    },
+  });
+};
+
+// this is for testing pagination
+
+// The fetch function uses the pageParam for pagination.
+const fetchMessages = async ({
+  pageParam = 1,
+  queryKey,
+}: QueryFunctionContext<string[]>) => {
+  const conversationId = queryKey[1];
+  const limit = 20; // Number of messages per page
+  const response = await axios.get<ApiResponse<GetMessagesResponseData>>(
+    `/api/conversations/${conversationId}/messages?page=${pageParam}&limit=${limit}`
+  );
+  // Assume the response returns an object: { messages: MessageData[] }
+  return response.data.data;
+};
+
+export const useMessagesInfiniteQuery = (conversationId: string) => {
+  return useInfiniteQuery({
+    queryKey: [conversationId, 'messages'],
+    queryFn: fetchMessages,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const limit = 20; // Number of messages per page
+      return lastPage?.messages.length && lastPage.messages.length < limit
+        ? undefined
+        : allPages.length + 1;
     },
   });
 };

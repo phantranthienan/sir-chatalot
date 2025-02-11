@@ -60,7 +60,7 @@ function Clean-Dev {
     docker-compose -f $DockerComposeDevFile down --volumes --remove-orphans
     docker-compose -f $DockerComposeDevFile rm --stop --force
 
-    docker image rm mern-auth/frontend:latest mern-auth/backend:latest 2>$null | Out-Null
+    docker image rm chatalot/frontend:latest chatalot/backend:latest 2>$null | Out-Null
 
     Write-Host "Development environment cleaned." -ForegroundColor $GREEN
 }

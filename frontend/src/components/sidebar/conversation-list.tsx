@@ -27,7 +27,6 @@ const ConversationList: React.FC = () => {
   }, [conversations, joinConversation]);
 
   if (isLoading) return <ConversationsSkeleton />;
-  console.log(conversations);
 
   return (
     <div className="w-full overflow-y-auto">

@@ -1,7 +1,7 @@
 services:
   nginx:
     image: nginx:latest
-    container_name: mern_auth_nginx
+    container_name: chatalot_nginx
     ports:
       - "80:80"
       - "443:443"
@@ -14,11 +14,11 @@ services:
     restart: unless-stopped
 
   frontend:
-    container_name: mern_auth_frontend
+    container_name: chatalot_frontend
     build:
       context: ../../frontend
       dockerfile: Dockerfile
-    image: mern-auth/frontend:latest
+    image: chatalot/frontend:latest
     ports:
       - "5173"
     env_file:
@@ -28,11 +28,11 @@ services:
     restart: unless-stopped
   
   backend:
-    container_name: mern_auth_backend
+    container_name: chatalot_backend
     build:
       context: ../../backend
       dockerfile: Dockerfile
-    image: mern-auth/backend:latest
+    image: chatalot/backend:latest
     ports:
       - "3000"
     env_file:
@@ -43,16 +43,16 @@ services:
     restart: unless-stopped
 
   database:
-    container_name: mern_auth_database
+    container_name: chatalot_database
     image: mongo:5.0
     ports:
       - "27017"
     volumes:
-      - mern-auth-data:/data/db
+      - chatalot-data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: qwerty
-      MONGO_INITDB_DATABASE: mern-auth
+      MONGO_INITDB_DATABASE: chatalot
     healthcheck:
       test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -61,4 +61,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  mern-auth-data:
+  chatalot-data:
