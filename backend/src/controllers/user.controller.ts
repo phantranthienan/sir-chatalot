@@ -20,12 +20,6 @@ export const getUserProfileController = async (
       user: {
         ...userProfile,
         _id: userProfile._id.toString(),
-        friends: userProfile.friends.map((friend) => (
-          {
-            ...friend,
-            _id: friend._id.toString()
-          }
-        ))
       }
     }
   );

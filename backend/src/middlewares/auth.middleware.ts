@@ -9,7 +9,8 @@ declare module 'express' {
             email: string;
             username: string;
             avatarUrl: string;
-            friends: string[];
+            isOnline: boolean;
+            lastSeen: Date;
         };
     }
 }
@@ -24,6 +25,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const accessToken = authHeader.split(' ')[1];
     const user = await decodeAccessToken(accessToken);
 
-    req.user = { ...user, _id: user._id.toString(), friends: user.friends.map(friend => friend.toString()) };
+    req.user = { ...user, _id: user._id.toString()};
     next();
 };

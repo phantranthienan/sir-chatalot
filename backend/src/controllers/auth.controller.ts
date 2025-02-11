@@ -21,7 +21,6 @@ export const registerController = async (
             user: {
                 ...newUser,
                 _id: newUser._id.toString(),
-                friends: newUser.friends.map((friend: any) => friend.toString()),
             }
         }
     );
@@ -68,7 +67,6 @@ export const loginController = async (
             user: { 
                 ...userObject, 
                 _id: userObject._id.toString(),
-                friends: userObject.friends.map((friend: any) => friend.toString())
             } 
         }
     );

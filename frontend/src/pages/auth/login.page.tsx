@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import useNotification from '@/hooks/use-notification';
 import { useAuthStore } from '@/stores/auth.store';
+import { useSocketStore } from '@/stores/socket.store';
 
 import * as authApi from '@/services/api/auth.api';
 
@@ -22,6 +23,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { authenticate } = useAuthStore();
   const { handleSuccess, handleError } = useNotification();
+  const { connect: connectSocket } = useSocketStore();
 
   const {
     register,
@@ -42,6 +44,7 @@ const LoginPage = () => {
         authenticate(response.data.user);
       }
       handleSuccess(response.message);
+      connectSocket();
       navigate('/');
     } catch (error) {
       handleError(error, ERROR_CONTEXTS.LOGIN);
@@ -50,14 +53,14 @@ const LoginPage = () => {
 
   return (
     <div>
-      <header className="mb-8 text-center">
+      <header className="text-center">
         <h1 className="text-2xl font-bold">Welcome Back!</h1>
         <p className="text-base-content/60">
           Log in to your account to continue
         </p>
       </header>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         <div className="fieldset w-xs sm:w-sm">
           <span className="fieldset-label text-base font-medium">Email</span>
           <div className="input input-bordered w-full">

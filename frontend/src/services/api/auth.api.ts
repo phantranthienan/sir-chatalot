@@ -14,7 +14,7 @@ import {
   LoginResponseData,
   CheckAuthResponseData,
 } from '@/types/api/responses/auth.responses';
-import { ApiResponse } from '@/types/api/responses/response.types';
+import { ApiResponse } from '@/types/api/responses/response.type';
 
 export const register = async (
   registerData: RegisterRequestBody

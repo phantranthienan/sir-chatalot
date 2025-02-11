@@ -1,9 +1,12 @@
 // src/pages/ProfilePage.tsx
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 import {
   useUserProfileQuery,
   useUpdateUserAvatarMutation,
 } from '@/hooks/react-query/user-profile';
+import useNotification from '@/hooks/use-notification';
+
 import ProfileHeader from '@/components/profile/profile-header';
 import AvatarSection from '@/components/profile/avatar-section';
 import UserInfo from '@/components/profile/user-info';
@@ -11,19 +14,23 @@ import FriendsSection from '@/components/profile/friends-section';
 import Loading from '@/components/ui/loading';
 
 const ProfilePage: React.FC = () => {
+  const { handleError } = useNotification();
   const { data: userProfile, isLoading, error } = useUserProfileQuery();
   const { mutate: updateAvatar, isPending: isUpdating } =
     useUpdateUserAvatarMutation();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      console.log(e.target.files[0]);
       updateAvatar(e.target.files[0]);
     }
   };
 
   if (isLoading) return <Loading />;
-  if (error) return <div>Error: {error.message}</div>;
+
+  if (error) {
+    handleError(error);
+    return <Navigate to="/" />;
+  }
 
   return (
     <main className="h-screen pt-16">
@@ -39,7 +46,7 @@ const ProfilePage: React.FC = () => {
             username={userProfile?.username}
             email={userProfile?.email}
           />
-          <FriendsSection friends={userProfile?.friends || []} />
+          <FriendsSection friends={[]} />
         </div>
       </div>
     </main>

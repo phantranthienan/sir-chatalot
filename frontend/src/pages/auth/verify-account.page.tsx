@@ -107,37 +107,35 @@ const VerifyAccountPage = () => {
 
   return (
     <div>
-      <header className="mb-8 text-center">
+      <header className="text-center">
         <h1 className="text-2xl font-bold">Verify Your Account</h1>
         <p className="text-base-content/60">
           Enter the 6-digit code sent to your email
         </p>
       </header>
 
-      <div className="space-y-4">
-        <div className="flex justify-center space-x-2">
-          {otp.map((digit, index) => (
-            <input
-              key={index}
-              ref={(el) => {
-                if (el) {
-                  inputRefs.current[index] = el;
-                }
-              }}
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              className="input input-bordered w-8 cursor-default text-center caret-transparent"
-            />
-          ))}
-        </div>
+      <div className="my-4 flex justify-center space-x-2">
+        {otp.map((digit, index) => (
+          <input
+            key={index}
+            ref={(el) => {
+              if (el) {
+                inputRefs.current[index] = el;
+              }
+            }}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={1}
+            value={digit}
+            onChange={(e) => handleChange(index, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
+            className="input input-bordered w-8 cursor-default text-center caret-transparent"
+          />
+        ))}
       </div>
 
-      <footer className="mt-8 text-center">
+      <footer className="text-center">
         <p className="text-base-content/60">
           Didn't receive the code?{' '}
           <button

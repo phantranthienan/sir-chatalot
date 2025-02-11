@@ -9,17 +9,20 @@ import { LINKS } from '@/constants/links';
 
 import { LogOut, MessageSquare, Settings, User } from 'lucide-react';
 import { clearAccessToken } from '@/utils/token.utils';
+import { useSocketStore } from '@/stores/socket.store';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { user, unAuthenticate } = useAuthStore();
   const { handleSuccess, handleError } = useNotification();
+  const { disconnect: disconnectSocket } = useSocketStore();
 
   const handleLogout = async () => {
     try {
       const response = await authApi.logout();
       clearAccessToken();
       unAuthenticate();
+      disconnectSocket();
       handleSuccess(response.message);
       navigate(LINKS.LOGIN);
     } catch (error) {

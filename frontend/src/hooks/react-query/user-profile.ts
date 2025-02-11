@@ -2,7 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getUserProfile, updateUserAvatar } from '@/services/api/user.api';
 import useNotification from '@/hooks/use-notification';
 
-import { QUERY_KEYS } from '@/constants/query-keys';
+export const QUERY_KEYS = {
+  USER_PROFILE: ['userProfile'],
+};
 
 export const useUserProfileQuery = () => {
   return useQuery({

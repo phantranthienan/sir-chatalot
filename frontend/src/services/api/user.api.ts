@@ -1,29 +1,25 @@
 import axios from '@/services/api/axios.config';
 
-import { ApiResponse } from '@/types/api/responses/response.types';
+import { ApiResponse } from '@/types/api/responses/response.type';
 import {
-  GetUserProfileResponse,
-  UpdateUserAvatarResponse,
+  GetUserProfileResponseData,
+  UpdateUserAvatarResponseData,
 } from '@/types/api/responses/user.responses';
 
 export const getUserProfile = async (): Promise<
-  ApiResponse<GetUserProfileResponse>
+  ApiResponse<GetUserProfileResponseData>
 > => {
   const response =
-    await axios.get<ApiResponse<GetUserProfileResponse>>('/users/me');
+    await axios.get<ApiResponse<GetUserProfileResponseData>>('/users/me');
   return response.data;
 };
 
 export const updateUserAvatar = async (
   image: File
-): Promise<ApiResponse<UpdateUserAvatarResponse>> => {
+): Promise<ApiResponse<UpdateUserAvatarResponseData>> => {
   const formData = new FormData();
-  console.log('image', image);
   formData.append('avatar', image);
-  for (const [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
-  const response = await axios.put<ApiResponse<UpdateUserAvatarResponse>>(
+  const response = await axios.put<ApiResponse<UpdateUserAvatarResponseData>>(
     '/users/me/avatar',
     formData
   );

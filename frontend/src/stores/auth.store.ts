@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import * as authApi from '@/services/api/auth.api';
 
-import { UserInterface } from '@/types/common/user.types';
+import { UserData } from '@/types/api/common.types';
 type AuthStates = {
-  user: UserInterface | null;
+  user: UserData | null;
   isAuthenticated: boolean;
   isCheckingAuth: boolean;
 };
 
 type AuthActions = {
   checkAuth: () => Promise<void>;
-  authenticate: (userData: UserInterface) => Promise<void>;
+  authenticate: (userData: UserData) => Promise<void>;
   unAuthenticate: () => Promise<void>;
 };
 

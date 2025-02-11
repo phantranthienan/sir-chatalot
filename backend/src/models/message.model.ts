@@ -15,10 +15,17 @@ const messageSchema = new Schema({
   text: {
     type: String,
   },
-  image: {
-    type: String,
-  }
 }, { timestamps: true });
+
+messageSchema.index({ conversation: 1 });
+
+const transformFunction = (_: any, ret: any) => {
+  delete ret.__v;
+  return ret;
+};
+
+messageSchema.set('toObject', { transform: transformFunction });
+messageSchema.set('toJSON', { transform: transformFunction });
 
 export type MessageType = InferSchemaType<typeof messageSchema>;
 export type MessageDocument = HydratedDocument<MessageType>;

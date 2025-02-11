@@ -12,12 +12,7 @@ export const getAllUsers = async () => {
 }
 
 export const getUserProfile = async (userId: string) => {
-    const user = await User.findById(userId).populate<{ friends: {
-        _id: string;
-        email: string;
-        username: string;
-        avatarUrl: string;
-    }[]}>('friends', '_id email username avatarUrl').exec();
+    const user = await User.findById(userId);
 
     if (!user) {
         throw new NotFoundError(MESSAGES.USER_NOT_FOUND);
@@ -34,7 +29,7 @@ export const updateUserAvatar = async (userId: string, fileBuffer: Buffer, filen
 
     const user = await User.findById(userId);
     if (!user) {
-        throw new NotFoundError();
+        throw new NotFoundError(MESSAGES.USER_NOT_FOUND);
     }
 
     const avatarUrl = await uploadAvatar(fileBuffer, `avatars/${userId}`, filename);

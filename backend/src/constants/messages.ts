@@ -15,10 +15,7 @@ export const MESSAGES = {
 
     // User messages
     AVATAR_UPDATED: 'Avatar updated successfully',
-    USERS_FETCHED: 'Users fetched successfully',
     USER_PROFILE_FETCHED: 'User profile fetched successfully',
-    USER_FRIENDS_FETCHED: 'User friends fetched successfully',
-    FRIEND_REQUESTS_FETCHED: 'Friend requests fetched successfully',
 
     //************ ERROR MESSAGES ***************/
     // Auth messages

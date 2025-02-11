@@ -8,11 +8,16 @@ interface NotificationStates {
   isVisible: boolean;
   message: string;
   type: NotificationType;
+}
+
+interface NotificationActions {
   show: (message: string, type: NotificationType) => void;
   hide: () => void;
 }
 
-export const useNotificationStore = create<NotificationStates>((set) => ({
+export const useNotificationStore = create<
+  NotificationStates & NotificationActions
+>((set) => ({
   isVisible: false,
   message: '',
   type: 'info',

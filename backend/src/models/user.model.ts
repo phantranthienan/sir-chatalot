@@ -35,6 +35,14 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     }],
+    isOnline: {
+        type: Boolean,
+        default: false,
+    },
+    lastSeen: { 
+        type: Date,
+        default: new Date(),
+    },
     verificationCode: String,
     verificationCodeExpiresAt: Date,
     resetPasswordToken: String,
@@ -45,7 +53,6 @@ const transformFunction = (_: any, ret: any) => {
     delete ret.__v;
     delete ret.password;
     delete ret.isVerified;
-    delete ret.socketId;
     delete ret.verificationCode;
     delete ret.verificationCodeExpiresAt;
     delete ret.resetPasswordToken;

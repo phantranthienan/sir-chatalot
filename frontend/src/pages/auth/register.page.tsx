@@ -40,7 +40,7 @@ const RegisterPage = () => {
   return (
     <div>
       {/* Header for register form */}
-      <header className="text-center sm:mb-8">
+      <header className="text-center">
         <h1 className="text-2xl font-bold">Create Account</h1>
         <p className="text-base-content/60">
           Get started with your free account
@@ -48,7 +48,7 @@ const RegisterPage = () => {
       </header>
 
       {/* Register form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:my-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         <div className="fieldset w-xs sm:w-sm">
           <span className="fieldset-label text-base font-medium">Email</span>
           <div className="input input-bordered w-full">

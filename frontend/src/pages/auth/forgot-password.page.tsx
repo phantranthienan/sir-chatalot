@@ -41,14 +41,14 @@ const ForgotPasswordPage: React.FC = () => {
 
   return (
     <div>
-      <header className="mb-8 text-center">
+      <header className="text-center">
         <h1 className="text-2xl font-bold">Forgot Your Password?</h1>
         <p className="text-base-content/60">
           Enter your email to receive a reset link
         </p>
       </header>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         <div className="fieldset w-xs sm:w-sm">
           <span className="fieldset-label text-base font-medium">Email</span>
           <div className="input input-bordered w-full">

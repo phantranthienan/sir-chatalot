@@ -1,34 +1,18 @@
 // Type definitions for responses related to authentication
+import { UserData } from '@/types/common.types';
 export interface RegisterResponseData {
-    user: {
-        _id: string,
-        email: string,
-        username: string,
-        avatarUrl: string,
-        friends: string[],
-    }
+  user: UserData;
 }
+
 export interface LoginResponseData {
-    accessToken: string,
-    user: {
-        _id: string,
-        email: string,
-        username: string,
-        avatarUrl: string,
-        friends: string[],
-    }
+  accessToken: string;
+  user: UserData;
 }
 
 export interface CheckAuthResponseData {
-    user: {
-        _id: string,
-        email: string,
-        username: string,
-        avatarUrl: string,
-        friends: string[],
-    }
+  user: UserData;
 }
 
 export interface RefreshTokenResponseData {
-    accessToken: string,
+  accessToken: string;
 }

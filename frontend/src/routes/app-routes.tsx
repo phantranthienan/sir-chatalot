@@ -6,7 +6,10 @@ import AuthLayout from '@/layouts/auth.layout';
 import ProtectedRoute from './protected-route';
 import { LINKS } from '@/constants/links';
 
-const HomePage = lazy(() => import('@/pages/home.page'));
+const AppLayout = lazy(() => import('@/layouts/app.layout'));
+const HomePage = lazy(() => import('@/pages/app/home.page'));
+const ConversationPage = lazy(() => import('@/pages/app/conversation.page'));
+
 const ProfilePage = lazy(() => import('@/pages/profile.page'));
 const SettingPage = lazy(() => import('@/pages/setting.page'));
 
@@ -17,12 +20,15 @@ const ForgotPasswordPage = lazy(() => import('@/pages/auth/forgot-password.page'
 const ResetPasswordPage = lazy(() => import('@/pages/auth/reset-password.page'));
 const NotFoundPage = lazy(() => import('@/pages/not-found.page'));
 
-const AppWithRoutes = () => {
+const AppRoutes = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route path={LINKS.HOME} element={<ProtectedRoute />}>
-          <Route index element={<HomePage />} />
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path=":conversationId" element={<ConversationPage/>} />
+          </Route>
           <Route path="profile" element={<ProfilePage />} />
         </Route>
 
@@ -43,4 +49,4 @@ const AppWithRoutes = () => {
   );
 };
 
-export default AppWithRoutes;
+export default AppRoutes;
