@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { useConversationDetailsQuery } from '@/hooks/react-query/conversations';
 
 import { useAuthStore } from '@/stores/auth.store';
@@ -12,14 +13,23 @@ import MessageInput from '@/components/chat/message-input';
 const ConversationPage: React.FC = () => {
   const { conversationId } = useParams();
   const { user } = useAuthStore();
-  const { onlineUsers, joinConversation, socket } = useSocketStore();
+  const { onlineUsers, joinConversation, socket, setActiveConversationId } =
+    useSocketStore();
+  const queryClient = useQueryClient();
 
   // join the conversation room
   useEffect(() => {
     if (socket && conversationId) {
       joinConversation(conversationId);
+      socket.emit('messages_seen', conversationId);
     }
-  }, [conversationId, joinConversation, socket]);
+  }, [conversationId, joinConversation, queryClient, socket]);
+
+  useEffect(() => {
+    if (conversationId) {
+      setActiveConversationId(conversationId);
+    }
+  }, [conversationId, setActiveConversationId]);
 
   // Fetch conversation details
   const { data: conversation } = useConversationDetailsQuery(conversationId!);

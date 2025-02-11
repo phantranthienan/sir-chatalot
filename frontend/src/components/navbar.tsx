@@ -10,9 +10,11 @@ import { LINKS } from '@/constants/links';
 import { LogOut, MessageSquare, Settings, User } from 'lucide-react';
 import { clearAccessToken } from '@/utils/token.utils';
 import { useSocketStore } from '@/stores/socket.store';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user, unAuthenticate } = useAuthStore();
   const { handleSuccess, handleError } = useNotification();
   const { disconnect: disconnectSocket } = useSocketStore();
@@ -23,6 +25,7 @@ const Navbar: React.FC = () => {
       clearAccessToken();
       unAuthenticate();
       disconnectSocket();
+      queryClient.clear();
       handleSuccess(response.message);
       navigate(LINKS.LOGIN);
     } catch (error) {
@@ -46,7 +49,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center gap-2">
             <Link
               to={LINKS.SETTING}
-              className="btn btn-sm btn-ghost gap-2 py-5"
+              className="btn btn-sm btn-ghost gap-2 py-5 hover:rounded-md"
             >
               <Settings size={20} />
               <span className="hidden text-sm font-medium sm:inline">
@@ -58,7 +61,7 @@ const Navbar: React.FC = () => {
               <>
                 <Link
                   to={LINKS.PROFILE}
-                  className="btn btn-sm btn-ghost gap-2 py-5"
+                  className="btn btn-sm btn-ghost gap-2 py-5 hover:rounded-md"
                 >
                   <User size={20} />
                   <span className="hidden text-sm font-medium sm:inline">
@@ -67,7 +70,7 @@ const Navbar: React.FC = () => {
                 </Link>
 
                 <button
-                  className="btn btn-sm btn-ghost gap-2 py-5"
+                  className="btn btn-sm btn-ghost gap-2 py-5 hover:rounded-md"
                   onClick={handleLogout}
                 >
                   <LogOut size={20} />

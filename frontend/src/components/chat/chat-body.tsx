@@ -2,8 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import dayjs from 'dayjs';
 import { useMessagesQuery } from '@/hooks/react-query/conversations';
-import { useQueryClient } from '@tanstack/react-query';
-import { useSocketStore } from '@/stores/socket.store';
 
 import MessagesSkeleton from '../skeletons/messages.skeleton';
 import { useAuthStore } from '@/stores/auth.store';
@@ -18,8 +16,6 @@ interface ChatBodyProps {
 const ChatBody: React.FC<ChatBodyProps> = ({ conversationId }) => {
   const { user } = useAuthStore();
   const { data: messages, isLoading } = useMessagesQuery(conversationId);
-  const { socket } = useSocketStore();
-  const queryClient = useQueryClient();
 
   const messageEndRef = useRef<HTMLDivElement>(null);
 
@@ -29,52 +25,41 @@ const ChatBody: React.FC<ChatBodyProps> = ({ conversationId }) => {
     }
   }, [messages]);
 
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleNewMessage = (newMessage: MessageData) => {
-      if (newMessage.conversation === conversationId) {
-        queryClient.setQueryData(
-          [conversationId, 'messages'],
-          (oldMessages: MessageData[] | undefined) => {
-            return oldMessages ? [...oldMessages, newMessage] : [newMessage];
-          }
-        );
-      }
-    };
-
-    socket.on('new_message', handleNewMessage);
-
-    return () => {
-      socket.off('new_message', handleNewMessage);
-    };
-  }, [socket, conversationId, queryClient]);
-
   if (isLoading) return <MessagesSkeleton />;
+
+  const getDividerInfo = (
+    messages: MessageData[],
+    message: MessageData,
+    index: number
+  ) => {
+    const currentDay = dayjs(message.createdAt).format('YYYY-MM-DD');
+    const previousDay =
+      index > 0
+        ? dayjs(messages[index - 1].createdAt).format('YYYY-MM-DD')
+        : null;
+    // show divider if it's the first message or if the current day is different from the previous day
+    const showDivider = index === 0 || currentDay !== previousDay;
+    // if today, show "Today" instead of the date
+    const dividerText =
+      currentDay === dayjs().format('YYYY-MM-DD')
+        ? 'Today'
+        : dayjs(message.createdAt).format('MMM D, YYYY');
+    return { showDivider, dividerText };
+  };
 
   return (
     <div className="flex-1 space-y-4 overflow-y-auto p-4">
       {messages?.map((message, index) => {
-        // Format the current message's day and compare with previous message's day
-        const currentDay = dayjs(message.createdAt).format('YYYY-MM-DD');
-        const previousDay =
-          index > 0
-            ? dayjs(messages[index - 1].createdAt).format('YYYY-MM-DD')
-            : null;
-        // Show divider if it's the first message or if the day changed
-        const showDivider = index === 0 || currentDay !== previousDay;
-        // If today's date, display "Today", otherwise format the date
-        const dividerText =
-          currentDay === dayjs().format('YYYY-MM-DD')
-            ? 'Today'
-            : dayjs(message.createdAt).format('MMM D, YYYY');
+        const { showDivider, dividerText } = getDividerInfo(
+          messages,
+          message,
+          index
+        );
 
         return (
           <React.Fragment key={message._id}>
             {showDivider && (
-              <div className="divider text-primary-content/50 text-sm">
-                {dividerText}
-              </div>
+              <div className="divider text-sm">{dividerText}</div>
             )}
             <div
               className={twMerge(
@@ -101,7 +86,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ conversationId }) => {
               </div>
               <div
                 className={twMerge(
-                  'chat-bubble rounded-2xl p-2',
+                  'chat-bubble rounded-2xl',
                   message.sender._id === user?._id
                     ? 'bg-primary text-primary-content'
                     : 'bg-base-200'
@@ -110,7 +95,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ conversationId }) => {
                 <p>{message.text}</p>
               </div>
               <div className="chat-header">
-                <time className="text-xs opacity-50">
+                <time className="text-base-content/50 text-xs">
                   {dayjs(message.createdAt).format('HH:mm')}
                 </time>
               </div>

@@ -26,7 +26,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ conversationId }) => {
       />
       <button
         type="submit"
-        className="btn btn-circle btn-sm"
+        className="btn btn-square btn-primary btn-sm sm:btn-md rounded-md"
         disabled={!text.trim()}
       >
         <Send size={20} />

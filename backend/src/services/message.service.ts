@@ -1,20 +1,33 @@
 import { Message } from "@/models/message.model";
 import { Conversation } from "@/models/conversation.model";
+import { NotFoundError } from "@/errors/api.errors";
 export const sendMessage = async (
     conversationId: string,
     senderId: string,
     text: string,
 ) => {
-    console.log('sendMessage', conversationId, senderId, text);
     const message = new Message({
         conversation: conversationId,
         sender: senderId,
         text,
     });
 
+    const conversation = await Conversation.findById(conversationId);
+    if (!conversation) {
+      throw new NotFoundError('Conversation not found');
+    }
+
+    const receiverId = conversation.participants.find((p) => p.toString() !== senderId);
+    if (!receiverId) {
+      throw new NotFoundError('Receiver not found in conversation');
+    }
+
     await Promise.all([
         message.save(), 
-        Conversation.findByIdAndUpdate(conversationId, { lastMessage: message._id })
+        Conversation.findByIdAndUpdate(conversationId, { 
+            lastMessage: message._id,
+            $inc: { [`unseenCount.${receiverId}`]: 1 },
+        })
     ]);
 
     const populatedMessage = await message.populate('sender');

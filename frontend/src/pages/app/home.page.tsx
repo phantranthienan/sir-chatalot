@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSocketStore } from '@/stores/socket.store';
 import { MessageSquare } from 'lucide-react';
 
 const HomePage: React.FC = () => {
+  const { setActiveConversationId } = useSocketStore();
+
+  useEffect(() => {
+    setActiveConversationId(null);
+  }, [setActiveConversationId]);
+
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center">
       <div className="max-w-md space-y-2 text-center">

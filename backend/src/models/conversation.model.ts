@@ -13,12 +13,20 @@ const conversationSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Message',
   },
+  unseenCount: {
+    type: Map,
+    of: Number,
+    default: {},
+  },
 }, { timestamps: true });
 
 conversationSchema.index({ participants: 1 });
 
 const transformFunction = (_: any, ret: any) => {
   delete ret.__v;
+  if (ret.unseenCount instanceof Map) {
+    ret.unseenCount = Object.fromEntries(ret.unseenCount);
+  };
   return ret;
 };
 

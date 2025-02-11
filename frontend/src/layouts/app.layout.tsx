@@ -3,6 +3,8 @@ import Sidebar from '@/components/sidebar';
 import { Outlet } from 'react-router-dom';
 import { useAuthStore } from '@/stores/auth.store';
 import { useSocketStore } from '@/stores/socket.store';
+import useMessageListener from '@/hooks/socket/use-message-listener';
+import useConversationListener from '@/hooks/socket/use-conversation-listener';
 
 const AppLayout: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
@@ -13,6 +15,9 @@ const AppLayout: React.FC = () => {
       connectSocket();
     }
   }, [isAuthenticated, connectSocket]);
+
+  useMessageListener();
+  useConversationListener();
 
   return (
     <div className="bg-base-200 h-screen px-4 pt-24 pb-4">

@@ -6,8 +6,10 @@ const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 interface SocketStates {
   socket: Socket | null;
+  activeConversationId: string | null;
   isConnected: boolean;
   onlineUsers: string[];
+  joinedConversations: Set<string>;
 }
 
 interface SocketActions {
@@ -16,8 +18,11 @@ interface SocketActions {
   setSocket: (socket: Socket) => void;
   joinConversation: (conversationId: string) => void;
   leaveConversation: (conversationId: string) => void;
+  emitTyping: (conversationId: string) => void;
+  emitStopTyping: (conversationId: string) => void;
   sendMessage: (conversationId: string, text: string) => void;
   setOnlineUsers: (users: string[]) => void;
+  setActiveConversationId: (conversationId: string | null) => void;
 }
 
 export const useSocketStore = create<SocketStates & SocketActions>(
@@ -25,6 +30,8 @@ export const useSocketStore = create<SocketStates & SocketActions>(
     socket: null,
     isConnected: false,
     onlineUsers: [],
+    activeConversationId: null,
+    joinedConversations: new Set(),
 
     connect: () => {
       const socket = io(SOCKET_URL, {
@@ -63,12 +70,18 @@ export const useSocketStore = create<SocketStates & SocketActions>(
     },
 
     joinConversation: (conversationId: string) => {
-      const { socket } = get();
+      const { socket, joinedConversations } = get();
       if (socket) {
-        socket.emit('join_conversation', conversationId);
+        // Only join if not already joined
+        if (!joinedConversations.has(conversationId)) {
+          socket.emit('join_conversation', conversationId);
+          joinedConversations.add(conversationId);
+          set({ joinedConversations });
+        } else {
+          console.log(`Already joined conversation ${conversationId}`);
+        }
       }
     },
-
     leaveConversation: (conversationId: string) => {
       const { socket } = get();
       if (socket) {
@@ -84,8 +97,26 @@ export const useSocketStore = create<SocketStates & SocketActions>(
       }
     },
 
+    emitTyping: (conversationId: string) => {
+      const { socket } = get();
+      if (socket) {
+        socket.emit('typing', conversationId);
+      }
+    },
+
+    emitStopTyping: (conversationId: string) => {
+      const { socket } = get();
+      if (socket) {
+        socket.emit('stop_typing', conversationId);
+      }
+    },
+
     setOnlineUsers: (users: string[]) => {
       set({ onlineUsers: users });
+    },
+
+    setActiveConversationId: (conversationId: string | null) => {
+      set({ activeConversationId: conversationId });
     },
   })
 );

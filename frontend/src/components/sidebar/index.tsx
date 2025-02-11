@@ -26,7 +26,7 @@ const Sidebar: React.FC = () => {
           onClick={() =>
             (document.getElementById('modal') as HTMLDialogElement)!.showModal()
           }
-          className="btn btn-square"
+          className="btn btn-square rounded-lg"
         >
           <Plus size={24} />
         </button>

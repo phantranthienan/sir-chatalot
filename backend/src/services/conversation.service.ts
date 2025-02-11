@@ -1,6 +1,8 @@
 import { ApiError, BadRequestError, NotFoundError } from '@/errors/api.errors';
 import { Conversation } from '../models/conversation.model';
 import { User } from '../models/user.model';
+import { io } from '@/server'
+import { onlineUsers } from '@/sockets';
 
 export const initiateConversation = async (myId: string, otherUsername: string) => {
     const other = await User.findOne({ username: otherUsername });
@@ -30,6 +32,11 @@ export const initiateConversation = async (myId: string, otherUsername: string) 
 
     const conversationObject = conversation.toObject();
 
+    const otherSocketId = onlineUsers.get(otherId);
+    if (otherSocketId) {
+        io.to(otherSocketId).emit('new_conversation');
+    }
+
     return conversationObject;
 };
 
@@ -38,7 +45,6 @@ export const getConversations = async (userId: string) => {
         .populate('participants')
         .populate('lastMessage')
         .sort({ updatedAt: -1 });
-    
     const conversationObjects = conversations.map(conversation => conversation.toObject());
     return conversationObjects;
 };
@@ -54,4 +60,10 @@ export const getConversationById = async (conversationId: string) => {
 
     const conversationObject = conversation.toObject();
     return conversationObject;
+};
+
+export const resetUnseenCount = async (conversationId: string, userId: string) => {
+    await Conversation.findByIdAndUpdate(conversationId, {
+        $set: { [`unseenCount.${userId}`]: 0 },
+    });
 };

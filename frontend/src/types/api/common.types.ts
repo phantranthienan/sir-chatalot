@@ -19,7 +19,8 @@ export interface MessageData {
 export interface ConversationData {
   _id: string;
   participants: UserData[];
-  lastMessage: MessageData;
+  lastMessage: MessageData & { sender: string };
+  unseenCount: { [key: string]: number };
   createdAt: Date;
   updatedAt: Date;
 }
