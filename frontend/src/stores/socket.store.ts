@@ -38,6 +38,7 @@ export const useSocketStore = create<SocketStates & SocketActions>(
         transports: ['websocket'],
         rejectUnauthorized: false,
         autoConnect: false,
+        secure: true,
         query: {
           userId: useAuthStore.getState().user?._id,
         },
